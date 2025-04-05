@@ -20,13 +20,6 @@ export class DogApiService {
       .pipe(map((res) => res.message));
   }
   /**
-   * Get all breeds
-   * @returns
-   */
-  getBreeds() {
-    return this.request<BreedList>('breeds/list/all');
-  }
-  /**
    * Search by breed
    * @param breed - The breed to search for
    * @returns
@@ -45,7 +38,7 @@ export class DogApiService {
   }
   /**
    * Search by breed and sub breed
-   * @returns
+   * @returns Resource for search by breed and sub breed
    */
   search(breed: Signal<string>, subBreed?: Signal<string>) {
     return rxResource({
@@ -57,6 +50,16 @@ export class DogApiService {
 
         return this.searchBySubBreed(breed, subBreed);
       },
+    });
+  }
+  /**
+   * Get all breeds
+   * @returns Resource for all breeds
+   */
+  getAllBreeds() {
+    return rxResource({
+      loader: () => this.request<BreedList>('breeds/list/all'),
+      defaultValue: {},
     });
   }
 }
