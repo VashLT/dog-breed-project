@@ -41,4 +41,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
+.vscode
+package-lock.json
 bun.lockb
