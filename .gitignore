@@ -44,3 +44,5 @@ Thumbs.db
 .vscode
 package-lock.json
 bun.lockb
+api.rest
+**.code-workspace
