@@ -24,7 +24,6 @@ export class BreedItemComponent {
   itemClick = output<string>();
 
   onClick() {
-    console.log('clicked', this.src());
     this.itemClick.emit(this.src());
   }
 }

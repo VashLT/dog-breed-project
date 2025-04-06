@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { map, of } from 'rxjs';
+import { forkJoin, map, of } from 'rxjs';
 import { ApiResponse } from '@models/api.model';
 import { BreedList, BreedQuery } from '@models/breed.model';
+import { RANDOM_BREEDS_LIMIT } from '@constants/limits';
 @Injectable({
   providedIn: 'root',
 })
@@ -54,6 +55,24 @@ export class DogApiService {
 
         return this.searchBySubBreed(breed, subBreed);
       },
+    });
+  }
+  /**
+   * Get random breeds
+   * @returns Resource for random breeds
+   */
+  random() {
+    return rxResource<string[], undefined>({
+      loader: () => {
+        /**
+         * fetch n random images to show in the landing page
+         */
+        const requests = Array.from({ length: RANDOM_BREEDS_LIMIT })
+          .fill(null)
+          .map(() => this.request<string>('breeds/image/random'));
+        return forkJoin(requests);
+      },
+      defaultValue: [],
     });
   }
   /**

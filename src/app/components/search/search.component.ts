@@ -11,8 +11,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
 import { DogApiService } from '@/app/services/dog.api.service';
-import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, startWith, tap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-search',
   imports: [
@@ -23,11 +24,21 @@ import { MatIconModule } from '@angular/material/icon';
     MatAutocompleteModule,
     MatFormFieldModule,
     MatIconModule,
+    MatProgressSpinnerModule,
   ],
   template: `
+    @let isLoading = breeds.isLoading();
     <div class="search-container">
-      <mat-form-field appearance="outline">
-        <mat-icon matPrefix>search</mat-icon>
+      <mat-form-field appearance="outline" [ariaDisabled]="isLoading">
+        @if (isLoading) {
+          <mat-progress-spinner
+            matPrefix
+            id="search-spinner"
+            mode="indeterminate"
+          ></mat-progress-spinner>
+        } @else {
+          <mat-icon matPrefix>search</mat-icon>
+        }
         <input
           type="text"
           matInput
@@ -82,6 +93,14 @@ export class SearchComponent {
     startWith(''),
     debounceTime(300),
     distinctUntilChanged(),
+    /**
+     * Emits when the search term is empty.
+     */
+    tap((value) => {
+      if (!value?.length) {
+        this.selectedBreed.emit('');
+      }
+    }),
     map((value) => this._filter(value ?? '')),
   );
   /**

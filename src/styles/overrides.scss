@@ -7,9 +7,3 @@
     container-shape: 0,
   ));
 }
-/**
-  This is a workaround to prevent the body from scrolling when the dialog is open
-*/
-html.cdk-global-scrollblock {
-  overflow: hidden;
-}

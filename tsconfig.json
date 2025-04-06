@@ -10,7 +10,8 @@
       "@components/*": ["src/app/components/*"],
       "@pages/*": ["src/app/pages/*"],
       "@models/*": ["src/app/models/*"],
-      "@services/*": ["src/app/services/*"]
+      "@services/*": ["src/app/services/*"],
+      "@constants/*": ["src/app/constants/*"]
     },
     "strict": true,
     "noImplicitOverride": true,

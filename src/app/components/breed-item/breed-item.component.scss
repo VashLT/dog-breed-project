@@ -5,7 +5,8 @@
 .item-breed {
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background-color: var(--mat-sys-outline-variant);
+  // While loading, show a skeleton
+  background-color: var(--skeleton-color);
 
   img {
     width: 100%;

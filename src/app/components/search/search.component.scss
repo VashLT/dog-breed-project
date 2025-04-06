@@ -11,8 +11,11 @@
 
   mat-form-field {
     width: 100%;
+    &[aria-disabled='true'] {
+      pointer-events: none;
+    }
   }
-
+  // overrides the default background color of the input field
   ::ng-deep mat-form-field .mdc-text-field--outlined {
     background-color: var(--mat-sys-surface-container);
     border-radius: 0.25rem;
@@ -26,4 +29,17 @@
       outlined-focus-outline-width: 0.2rem,
     )
   );
+
+  @include mat.progress-spinner-overrides((
+    size: 1.25rem,
+    active-indicator-width: 1.25rem,
+    active-indicator-color: var(--mat-sys-outline),
+  ));
+
+  // Sometimes angular material is a bit of a pain ...
+  mat-progress-spinner#search-spinner {
+    height: 1.5rem !important;
+    width: 1.5rem !important;
+    margin-inline: 0.75rem;
+  }
 }

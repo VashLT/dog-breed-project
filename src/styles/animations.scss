@@ -1,0 +1,18 @@
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.skeleton {
+  animation: shimmer 1s forwards infinite linear;
+  background: var(--skeleton-color);
+  background-image: linear-gradient(to right, var(--skeleton-color) 0%, var(--skeleton-animation-color) 20%, var(--skeleton-color) 40%, var(--skeleton-color) 100%);
+  background-size: 200% 100%;
+  position: relative;
+}
+
