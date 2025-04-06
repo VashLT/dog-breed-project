@@ -10,6 +10,8 @@ import { BreedsGridComponent } from '@components/breeds-grid/breeds-grid.compone
 import { BreedsGridSkeletonComponent } from '@components/breeds-grid/breeds-grid-skeleton.component';
 import { DogApiService } from '@services/dog.api.service';
 import { BreedQuery } from '@models/breed.model';
+import { BREED_SUB_BREED_SEPARATOR } from '@/app/constants/keys';
+import { normalizeString } from '@/app/utils/strings';
 
 @Component({
   selector: 'app-search-breed',
@@ -20,10 +22,17 @@ import { BreedQuery } from '@models/breed.model';
       <p class="mat-body-large">
         Explore the world of dogs with our breed search tool
       </p>
-      <app-search (selectedBreed)="onSelectedBreed($event)"></app-search>
+      <app-search
+        [value]="searchValue()"
+        (selectedBreed)="onSelectedBreed($event)"
+      ></app-search>
     </div>
     @if (showingBreeds(); as showingBreeds) {
-      <app-breeds-grid [breeds]="showingBreeds"></app-breeds-grid>
+      <app-breeds-grid
+        [breeds]="showingBreeds"
+        [canSearchFromImages]="canSearchFromImages()"
+        (explore)="onExplore($event)"
+      ></app-breeds-grid>
     } @else if (breeds.isLoading() || randomBreeds.isLoading()) {
       <app-breeds-grid-skeleton></app-breeds-grid-skeleton>
     } @else if (breeds.error() || randomBreeds.error()) {
@@ -39,6 +48,10 @@ export class SearchBreedComponent {
    * Signal to store the breed selected by the user.
    */
   breed = signal<BreedQuery>({ breed: '', subBreed: '' });
+  /**
+   * Set a custom value for the search input.
+   */
+  searchValue = signal<string>('');
   /**
    * Resource to handle the breeds.
    */
@@ -64,17 +77,48 @@ export class SearchBreedComponent {
     return randomBreeds;
   });
   /**
+   * Whether the images have search action. This is an action for the random images, to
+   * allow the user to search for a breed by image.
+   */
+  canSearchFromImages = computed<boolean>(() => {
+    const breeds = this.breeds.value();
+    const randomBreeds = this.randomBreeds.value();
+    return !breeds?.length && randomBreeds?.length > 0;
+  });
+  /**
    * Function to handle the breed selected by the user.
    * if selectedBreed is empty, it means the user cleared the search.
    * @param selectedBreed - The breed selected by the user.
    */
   onSelectedBreed(selectedBreed: string) {
-    if (!selectedBreed.includes('-')) {
-      this.breed.set({ breed: selectedBreed, subBreed: '' });
-    } else {
-      // If the breed has a sub breed, split the string and set the breed and sub breed.
-      const [breed, subBreed] = selectedBreed.split(' - ');
-      this.breed.set({ breed, subBreed });
-    }
+    const hasSubBreed = selectedBreed.includes(BREED_SUB_BREED_SEPARATOR);
+    const normalizedSelectedBreed = normalizeString(selectedBreed);
+    if (hasSubBreed) return this.onSelectedSubBreed(normalizedSelectedBreed);
+    const currQuery = this.breed();
+    const isDiff = currQuery.breed !== normalizedSelectedBreed;
+    if (!isDiff) return;
+
+    this.breed.set({
+      breed: normalizedSelectedBreed,
+      subBreed: '',
+    });
+  }
+  onSelectedSubBreed(selectedBreed: string) {
+    const [breed, subBreed] = selectedBreed.split(BREED_SUB_BREED_SEPARATOR);
+    const currQuery = this.breed();
+    const isDiff = currQuery.breed !== breed || currQuery.subBreed !== subBreed;
+    if (!isDiff) return;
+
+    this.breed.set({
+      breed,
+      subBreed,
+    });
+  }
+  /**
+   * Explore the breed, is the same as the breed selected by the user.
+   * @param breed the breed to explore
+   */
+  onExplore(breed: string) {
+    this.searchValue.set(breed);
   }
 }

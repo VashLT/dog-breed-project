@@ -14,11 +14,26 @@
     &[aria-disabled='true'] {
       pointer-events: none;
     }
+
+
+    // Sometimes angular material is a bit of a pain ...
+    mat-progress-spinner#search-spinner {
+      height: 1.5rem !important;
+      width: 1.5rem !important;
+      margin-inline: 0.75rem;
+    }
   }
-  // overrides the default background color of the input field
-  ::ng-deep mat-form-field .mdc-text-field--outlined {
-    background-color: var(--mat-sys-surface-container);
-    border-radius: 0.25rem;
+
+  ::ng-deep mat-form-field {
+    & .mat-mdc-form-field-icon-suffix {
+      padding-inline: 0.25rem;
+    }
+
+    // overrides the default background color of the input field
+    & .mdc-text-field--outlined {
+      background-color: var(--mat-sys-surface-container);
+      border-radius: 0.25rem;
+    }
   }
 
   @include mat.form-field-overrides(
@@ -36,10 +51,4 @@
     active-indicator-color: var(--mat-sys-outline),
   ));
 
-  // Sometimes angular material is a bit of a pain ...
-  mat-progress-spinner#search-spinner {
-    height: 1.5rem !important;
-    width: 1.5rem !important;
-    margin-inline: 0.75rem;
-  }
 }

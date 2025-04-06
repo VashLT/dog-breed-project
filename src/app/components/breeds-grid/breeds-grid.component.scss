@@ -8,10 +8,15 @@
   padding-block: 1rem;
 }
 
-
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 40rem) {
   :host {
     padding-inline: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+
+@media screen and (max-width: 30rem) {
+  :host {
+    grid-template-columns: auto;
   }
 }

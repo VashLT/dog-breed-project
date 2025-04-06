@@ -1,12 +1,27 @@
-:host {
-  display: contents;
+@use '@angular/material' as mat;
 
+:host {
+  // Use the host element as a container for the item
+  display: contents;
 }
 .item-breed {
   aspect-ratio: 1 / 1;
   overflow: hidden;
   // While loading, show a skeleton
   background-color: var(--skeleton-color);
+  position: relative;
+  // When the image is hovered, show the action buttons
+  &:hover {
+    img {
+      transform: scale(1.05);
+      filter: brightness(85%);
+    }
+
+    button {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
 
   img {
     width: 100%;
@@ -16,13 +31,31 @@
     border-radius: 0.1rem;
     cursor: zoom-in;
 
-    &:hover {
-      transform: scale(1.05);
-    }
     &:not([src]) {
       visibility: hidden;
     }
   }
+  // Action buttons
+  button {
+    --mdc-fab-small-container-color: var(--mat-sys-surface);
+    --mdc-fab-small-foreground-color: var(--mat-sys-on-surface);
+    --mdc-fab-small-container-shape: 0.25rem;
+    position: absolute;
+    right: 0.5rem;
+    z-index: 1;
+
+    // Hide the button until the image is hovered
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+
+    will-change: opacity, visibility;
+    &.btn-download {
+      bottom: 0.5rem;
+    }
+
+    &.btn-search {
+      top: 0.5rem;
+    }
+  }
 }
-
-

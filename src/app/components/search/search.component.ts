@@ -3,17 +3,27 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
+  input,
+  OnInit,
   output,
+  untracked,
+  viewChild,
 } from '@angular/core';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import {
+  MatAutocomplete,
+  MatAutocompleteModule,
+} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
-import { DogApiService } from '@/app/services/dog.api.service';
+import { DogApiService } from '@services/dog.api.service';
 import { debounceTime, distinctUntilChanged, map, startWith, tap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BREED_SUB_BREED_SEPARATOR } from '@/app/constants/keys';
+import { MatIconButton } from '@angular/material/button';
 @Component({
   selector: 'app-search',
   imports: [
@@ -25,6 +35,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatFormFieldModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatIconButton,
   ],
   template: `
     @let isLoading = breeds.isLoading();
@@ -54,16 +65,31 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
             <mat-option [value]="option">{{ option }}</mat-option>
           }
         </mat-autocomplete>
+        @if (searchControl.value) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="searchControl.setValue(null)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
       </mat-form-field>
     </div>
   `,
   styleUrl: './search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   private readonly api = inject(DogApiService);
+  readonly autoComplete = viewChild<MatAutocomplete>('auto');
+  /**
+   * Set a custom value for the search input.
+   */
+  value = input<string>('');
   selectedBreed = output<string>();
-  searchControl = new FormControl('');
+  searchControl = new FormControl<string | null>(null);
   breeds = this.api.getAllBreeds();
   /**
    * Pre-compute all possible options for the autocomplete.
@@ -77,7 +103,11 @@ export class SearchComponent {
       (acc: string[], [breed, subBreeds]) => {
         acc.push(breed);
         if (subBreeds.length) {
-          acc.push(...subBreeds.map((subBreed) => `${breed} - ${subBreed}`));
+          acc.push(
+            ...subBreeds.map(
+              (subBreed) => `${breed}${BREED_SUB_BREED_SEPARATOR}${subBreed}`,
+            ),
+          );
         }
         return acc;
       },
@@ -97,12 +127,41 @@ export class SearchComponent {
      * Emits when the search term is empty.
      */
     tap((value) => {
-      if (!value?.length) {
+      if (value === null) {
         this.selectedBreed.emit('');
       }
     }),
     map((value) => this._filter(value ?? '')),
   );
+  constructor() {
+    /**
+     * Sync a new target value with the search input.
+     * It behaves as if the user typed the value and selected an option.
+     */
+    effect(() => {
+      const targetValue = this.value();
+      const autoComplete = untracked(this.autoComplete);
+
+      this.searchControl.setValue(targetValue);
+
+      if (autoComplete) {
+        const option = autoComplete.options
+          ?.toArray()
+          ?.find(({ value }) => value === targetValue);
+        if (option) {
+          option.select();
+          this.selectedBreed.emit(targetValue);
+        }
+      }
+    });
+  }
+  ngOnInit(): void {
+    /**
+     * Initialize the search input with the value provided by the parent component.
+     * By default if empty, it will suggest all the breeds and sub-breeds.
+     */
+    this.searchControl.setValue(this.value());
+  }
   /**
    * Filter the list of breeds and sub-breeds based on the search term.
    * @param value - The search term.
