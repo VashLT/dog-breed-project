@@ -4,6 +4,31 @@
   @include mat.dialog-overrides((
     container-max-width: none,
     container-color: transparent,
-    container-shape: 0,
+    container-shape: 0rem,
+    ));
+
+    @include mat.snack-bar-overrides((
+      supporting-text-size: 1rem,
+      container-shape: 0.5rem,
   ));
+}
+
+.snackbar-info {
+  --mdc-snackbar-container-color: var(--mat-sys-info-container);
+  --mdc-snackbar-supporting-text-color: var(--mat-sys-on-info-container);
+}
+
+.snackbar-success {
+  --mdc-snackbar-container-color: var(--mat-sys-success-container);
+  --mdc-snackbar-supporting-text-color: var(--mat-sys-on-success-container);
+}
+
+.snackbar-error {
+  --mdc-snackbar-container-color: var(--mat-sys-error-container);
+  --mdc-snackbar-supporting-text-color: var(--mat-sys-on-error-container);
+}
+
+.snackbar-warning {
+  --mdc-snackbar-container-color: var(--mat-sys-warning-container);
+  --mdc-snackbar-supporting-text-color: var(--mat-sys-on-warning-container);
 }

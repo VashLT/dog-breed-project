@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { downloadFile } from '@/app/utils/files';
 import { tryCatch } from '@/app/utils/try-catch';
+import { SnackbarService } from '@/app/services/snackbar.service';
 
 @Component({
   selector: 'app-breed-detail-dialog',
@@ -39,6 +40,7 @@ export class BreedDetailDialogComponent {
   /**
    * Download the image from the data url
    */
+  constructor(private readonly snackbar: SnackbarService) {}
   async downloadImage() {
     this.isLoading.set(true);
     const fileName = this.data.split('/').pop();
@@ -47,6 +49,10 @@ export class BreedDetailDialogComponent {
     const { error } = await tryCatch(downloadFile(this.data, fileName));
     if (error) {
       console.error('Error downloading image:', error);
+      this.snackbar.show({
+        message: 'Error downloading image',
+        type: 'error',
+      });
     }
 
     this.isLoading.set(false);

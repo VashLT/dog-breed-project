@@ -1,6 +1,31 @@
 :root {
+  // custom colors
+  --success: #006e00;
+  --success-container: #d8ffd8;
+  --on-success: #ffffff;
+  --on-success-container: #002100;
+  --info: #005faf;
+  --info-container: #d4e3ff;
+  --on-info: #ffffff;
+  --on-info-container: #001c3a;
+  --warning: #ff9800;
+  --warning-container: #ffdad6;
+  --on-warning: #ffffff;
+  --on-warning-container: #410002;
+
+  // material system colors
+  --mat-sys-success-container: var(--success-container);
+  --mat-sys-on-success-container: var(--on-success-container);
+  --mat-sys-info-container: var(--info-container);
+  --mat-sys-on-info-container: var(--on-info-container);
+  --mat-sys-warning-container: var(--warning-container);
+  --mat-sys-on-warning-container: var(--on-warning-container);
+
+  // skeleton
   --skeleton-color: #eee;
   --skeleton-animation-color: #f5f5f5;
+
   // sizes
   --height-top-bar: 4rem;
 }
+

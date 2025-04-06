@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, TitleCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -27,7 +27,6 @@ import { MatIconButton } from '@angular/material/button';
 @Component({
   selector: 'app-search',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -36,6 +35,8 @@ import { MatIconButton } from '@angular/material/button';
     MatIconModule,
     MatProgressSpinnerModule,
     MatIconButton,
+    TitleCasePipe,
+    AsyncPipe,
   ],
   template: `
     @let isLoading = breeds.isLoading();
@@ -62,7 +63,7 @@ import { MatIconButton } from '@angular/material/button';
           (optionSelected)="selectedBreed.emit($event.option.value)"
         >
           @for (option of filteredOptions$ | async; track option) {
-            <mat-option [value]="option">{{ option }}</mat-option>
+            <mat-option [value]="option">{{ option | titlecase }}</mat-option>
           }
         </mat-autocomplete>
         @if (searchControl.value) {

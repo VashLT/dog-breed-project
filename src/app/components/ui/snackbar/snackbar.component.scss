@@ -1,0 +1,30 @@
+:host {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &.error {
+    background-color: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error);
+  }
+
+  &.success {
+    background-color: var(--mat-sys-success-container);
+    color: var(--mat-sys-on-success);
+  }
+
+  &.info {
+    background-color: var(--mat-sys-info-container);
+    color: var(--mat-sys-on-info);
+  }
+}
+
+// vertical align text
+.message {
+  line-height: 1;
+}
+
+.actions {
+  margin-left: auto;
+}

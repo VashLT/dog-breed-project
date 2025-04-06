@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -12,12 +13,13 @@ import { DogApiService } from '@services/dog.api.service';
 import { BreedQuery } from '@models/breed.model';
 import { BREED_SUB_BREED_SEPARATOR } from '@/app/constants/keys';
 import { normalizeString } from '@/app/utils/strings';
+import { SnackbarService } from '@/app/services/snackbar.service';
 
 @Component({
   selector: 'app-search-breed',
   imports: [SearchComponent, BreedsGridComponent, BreedsGridSkeletonComponent],
   template: `
-    <div class="container-search-breed">
+    <section class="container-search-breed">
       <h1>Search your favorite <em>dog breed</em></h1>
       <p class="mat-body-large">
         Explore the world of dogs with our breed search tool
@@ -26,7 +28,7 @@ import { normalizeString } from '@/app/utils/strings';
         [value]="searchValue()"
         (selectedBreed)="onSelectedBreed($event)"
       ></app-search>
-    </div>
+    </section>
     @if (showingBreeds(); as showingBreeds) {
       <app-breeds-grid
         [breeds]="showingBreeds"
@@ -36,7 +38,7 @@ import { normalizeString } from '@/app/utils/strings';
     } @else if (breeds.isLoading() || randomBreeds.isLoading()) {
       <app-breeds-grid-skeleton></app-breeds-grid-skeleton>
     } @else if (breeds.error() || randomBreeds.error()) {
-      Error...
+      <p class="mat-body-large">No breeds found</p>
     }
   `,
   styleUrl: './search-breed.component.scss',
@@ -85,6 +87,18 @@ export class SearchBreedComponent {
     const randomBreeds = this.randomBreeds.value();
     return !breeds?.length && randomBreeds?.length > 0;
   });
+
+  constructor(private readonly snackbar: SnackbarService) {
+    effect(() => {
+      const results = this.breeds.value();
+      if (!results?.length) return;
+
+      this.snackbar.show({
+        message: `${results.length} breeds found`,
+        type: 'success',
+      });
+    });
+  }
   /**
    * Function to handle the breed selected by the user.
    * if selectedBreed is empty, it means the user cleared the search.

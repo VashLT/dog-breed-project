@@ -7,10 +7,11 @@ import {
 } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { BreedItemComponent } from '@components/breed-item/breed-item.component';
-import { BreedDetailDialogComponent } from '../breed-detail-dialog/breed-detail-dialog.component';
+import { BreedDetailDialogComponent } from '@components/breed-detail-dialog/breed-detail-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { downloadFile } from '@/app/utils/files';
-import { tryCatch } from '@/app/utils/try-catch';
+import { downloadFile } from '@utils/files';
+import { tryCatch } from '@utils/try-catch';
+import { SnackbarService } from '@services/snackbar.service';
 
 @Component({
   selector: 'app-breeds-grid',
@@ -45,6 +46,7 @@ export class BreedsGridComponent {
    * Open the dialog to show the breed detail
    * @param src url of the breed image
    */
+  constructor(private readonly snackbar: SnackbarService) {}
   onItemPress(src: string) {
     this.dialog.open(BreedDetailDialogComponent, {
       data: src,
@@ -63,6 +65,10 @@ export class BreedsGridComponent {
     const { error } = await tryCatch(downloadFile(src, name));
     if (error) {
       console.error(error);
+      this.snackbar.show({
+        message: 'Error downloading image',
+        type: 'error',
+      });
     }
   }
   /**

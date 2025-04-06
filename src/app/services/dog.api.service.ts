@@ -1,17 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { forkJoin, map, of } from 'rxjs';
+import { catchError, forkJoin, map, of } from 'rxjs';
 import { ApiResponse } from '@models/api.model';
 import { BreedList, BreedQuery } from '@models/breed.model';
 import { RANDOM_BREEDS_LIMIT } from '@constants/limits';
+import { SnackbarService } from '@services/snackbar.service';
 @Injectable({
   providedIn: 'root',
 })
 export class DogApiService {
   private readonly BASE_URL = 'https://dog.ceo/api';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly snackbar: SnackbarService,
+  ) {}
   /**
    * Generic for API request, can be used for all requests
    */
@@ -23,22 +27,39 @@ export class DogApiService {
   /**
    * Search by breed
    * @param breed - The breed to search for
-   * @returns
+   * @returns Observable with the images for search by breed
    */
   searchByBreed(breed: string) {
-    return this.request<string[]>(`breed/${breed}/images`);
+    return this.request<string[]>(`breed/${breed}/images`).pipe(
+      catchError((err) => {
+        this.snackbar.show({
+          message: err ?? 'Error searching breed',
+          type: 'error',
+        });
+        return of([]);
+      }),
+    );
   }
   /**
    * Search by sub breed
    * @param breed - The breed to search for
    * @param subBreed - The sub breed to search for
-   * @returns
+   * @returns Observable with the images for search by sub breed
    */
   searchBySubBreed(breed: string, subBreed: string) {
-    return this.request<string[]>(`breed/${breed}/${subBreed}/images`);
+    return this.request<string[]>(`breed/${breed}/${subBreed}/images`).pipe(
+      catchError((err) => {
+        this.snackbar.show({
+          message: err ?? 'Error searching sub breed',
+          type: 'error',
+        });
+        return of([]);
+      }),
+    );
   }
   /**
    * Search by breed and sub breed
+   * @param query - The query to search for
    * @returns Resource for search by breed and sub breed
    */
   search(query: Signal<BreedQuery>) {
@@ -70,7 +91,15 @@ export class DogApiService {
         const requests = Array.from({ length: RANDOM_BREEDS_LIMIT })
           .fill(null)
           .map(() => this.request<string>('breeds/image/random'));
-        return forkJoin(requests);
+        return forkJoin(requests).pipe(
+          catchError((err) => {
+            this.snackbar.show({
+              message: err ?? 'Error loading random breeds',
+              type: 'error',
+            });
+            return of([]);
+          }),
+        );
       },
       defaultValue: [],
     });
