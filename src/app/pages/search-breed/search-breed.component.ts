@@ -14,7 +14,7 @@ import { BreedQuery } from '@models/breed.model';
   imports: [SearchComponent, BreedsGridComponent],
   template: `
     <div class="container-search-breed">
-      <h1>Search your favorite dog breed</h1>
+      <h1>Search your favorite <em>dog breed</em></h1>
       <p class="mat-body-large">
         Explore the world of dogs with our breed search tool
       </p>

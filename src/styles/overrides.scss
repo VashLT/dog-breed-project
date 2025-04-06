@@ -1,0 +1,15 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.dialog-overrides((
+    container-max-width: none,
+    container-color: transparent,
+    container-shape: 0,
+  ));
+}
+/**
+  This is a workaround to prevent the body from scrolling when the dialog is open
+*/
+html.cdk-global-scrollblock {
+  overflow: hidden;
+}

@@ -2,13 +2,15 @@
 This project is about dogs!
 
 ## Upcoming features
-- [] Search feature
-  - [] Search by breed
-  - [] Search by sub-breed
-  - [] autocomplete & suggestions
-- [] Display images
-- [] Pagination & infinite scrolling
+- [x] Search feature
+  - [x] Search by breed
+  - [x] Search by sub-breed
+  - [x] autocomplete & suggestions
+- [x] Display images
+- [] Random images
+- [] Virtual scrolling
 
 ## Additional features
-- [] Detailed breed information
+- [x] Detailed breed information
+- [] Fav list
 - [] Social sharing

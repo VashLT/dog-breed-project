@@ -2,6 +2,7 @@
 @use "./styles/variables";
 @use './styles/fonts';
 @use './styles/theme';
+@use './styles/overrides';
 
 html {
   color-scheme: light;

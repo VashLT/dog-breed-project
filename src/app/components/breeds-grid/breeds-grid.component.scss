@@ -1,0 +1,17 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 10px;
+  padding-inline: 4rem;
+  padding-block: 1rem;
+}
+
+
+@media screen and (max-width: 600px) {
+  :host {
+    padding-inline: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}

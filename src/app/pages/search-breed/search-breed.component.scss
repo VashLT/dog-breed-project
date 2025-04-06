@@ -17,3 +17,10 @@
     margin: 0;
   }
 }
+
+em {
+  background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, var(--mat-sys-primary), var(--mat-sys-inverse-primary));
+  font-style: normal;
+}

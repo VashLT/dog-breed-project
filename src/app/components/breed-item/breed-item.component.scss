@@ -1,0 +1,27 @@
+:host {
+  display: contents;
+
+}
+.item-breed {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: var(--mat-sys-outline-variant);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease-in-out;
+    border-radius: 0.1rem;
+    cursor: zoom-in;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+    &:not([src]) {
+      visibility: hidden;
+    }
+  }
+}
+
+
