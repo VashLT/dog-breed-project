@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
 import { DogApiService } from '@/app/services/dog.api.service';
 import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs';
-
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-search',
   imports: [
@@ -22,11 +22,12 @@ import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs';
     MatInputModule,
     MatAutocompleteModule,
     MatFormFieldModule,
+    MatIconModule,
   ],
   template: `
-    <div class="search-container w-full">
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Search Breeds</mat-label>
+    <div class="search-container">
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>search</mat-icon>
         <input
           type="text"
           matInput
@@ -45,7 +46,7 @@ import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs';
       </mat-form-field>
     </div>
   `,
-  styleUrl: './search.component.css',
+  styleUrl: './search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent {

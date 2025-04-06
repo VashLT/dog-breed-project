@@ -1,0 +1,29 @@
+@use '@angular/material' as mat;
+
+:host {
+  width: 100%;
+}
+
+.search-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 600px;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  ::ng-deep mat-form-field .mdc-text-field--outlined {
+    background-color: var(--mat-sys-surface-container);
+    border-radius: 0.25rem;
+  }
+
+  @include mat.form-field-overrides(
+    (
+      outlined-container-shape: 0.25rem,
+      outlined-hover-outline-color: var(--mat-sys-primary),
+      outlined-outline-width: 0.15rem,
+      outlined-focus-outline-width: 0.2rem,
+    )
+  );
+}

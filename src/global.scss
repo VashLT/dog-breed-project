@@ -1,11 +1,32 @@
-@use "@angular/material";
-@import "@angular/material/prebuilt-themes/azure-blue.css";
+@use '@angular/material' as mat;
+@use "./styles/variables";
+@use './styles/fonts';
+@use './styles/theme';
+
+html {
+  color-scheme: light;
+  background: var(--mat-sys-surface);
+  @include mat.theme(
+    (
+      color: mat.$azure-palette,
+      typography: (
+        plain-family: Work Sans,
+        brand-family: Cal Sans,
+      ),
+      density: 0,
+      elevation: 0,
+    )
+  );
+}
 
 html,
 body {
   height: 100%;
+  margin: 0px;
 }
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }

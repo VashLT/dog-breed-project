@@ -11,12 +11,6 @@ import { RouterOutlet } from '@angular/router';
       <router-outlet />
     </main>
   `,
-  styleUrl: './app.component.scss',
+  styles: ``,
 })
-export class AppComponent {
-  title = 'dog-breed-project';
-
-  method() {
-    return 'hola';
-  }
-}
+export class AppComponent {}

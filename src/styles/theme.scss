@@ -1,0 +1,68 @@
+/* These tokens are generated using https://themes.angular-material.dev/ */
+/* Preview: https://themes.angular-material.dev/?seed-error=%23ba1a1a&seed-neutral=%23212121&seed-neutral-variant=%23717783&seed-primary=%231976d2&seed-secondary=%23475f84&seed-tertiary=%238540a1 */
+/* Seed Colors: primary: #1976d2, secondary: #475f84, tertiary: #8540a1, error: #ba1a1a, neutral: #212121, neutral-variant: #717783 */
+
+@use "@angular/material" as mat;
+
+
+/* Light Theme */
+:root, :host {
+  @include mat.theme-overrides((
+    primary: #005faf,
+    on-primary: #ffffff,
+    primary-container: #d4e3ff,
+    on-primary-container: #001c3a,
+    inverse-primary: #a5c8ff,
+    primary-fixed: #d4e3ff,
+    primary-fixed-dim: #a5c8ff,
+    on-primary-fixed: #001c3a,
+    on-primary-fixed-variant: #004786,
+    secondary: #475f84,
+    on-secondary: #ffffff,
+    secondary-container: #d5e3ff,
+    on-secondary-container: #001c3b,
+    secondary-fixed: #d5e3ff,
+    secondary-fixed-dim: #afc8f2,
+    on-secondary-fixed: #001c3b,
+    on-secondary-fixed-variant: #2f476b,
+    tertiary: #8540a1,
+    on-tertiary: #ffffff,
+    tertiary-container: #f8d8ff,
+    on-tertiary-container: #320046,
+    tertiary-fixed: #f8d8ff,
+    tertiary-fixed-dim: #ecb1ff,
+    on-tertiary-fixed: #320046,
+    on-tertiary-fixed-variant: #6b2687,
+    background: #fdf8f8,
+    on-background: #1c1b1b,
+    surface: #fdf8f8,
+    surface-dim: #ddd9d8,
+    surface-bright: #fdf8f8,
+    surface-container-lowest: #ffffff,
+    surface-container-low: #f7f3f2,
+    surface-container: #f1edec,
+    surface-container-high: #ebe7e7,
+    surface-container-highest: #e5e2e1,
+    on-surface: #1c1b1b,
+    shadow: #000000,
+    scrim: #000000,
+    surface-tint: #5f5e5e,
+    inverse-surface: #313030,
+    inverse-on-surface: #f4f0ef,
+    outline: #747878,
+    outline-variant: #c5c6cc,
+    neutral: #787676,
+    neutral10: #1c1b1b,
+    error: #ba1a1a,
+    error-container: #ffdad6,
+    on-error: #ffffff,
+    on-error-container: #410002,
+    surface-variant: #e2e2e8,
+    on-surface-variant: #45474b,
+    neutral-variant: #75777c,
+    neutral-variant20: #2e3035,
+    inverse-secondary: #afc8f2,
+    inverse-tertiary: #ecb1ff,
+  ));
+}
+

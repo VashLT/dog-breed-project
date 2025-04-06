@@ -1,0 +1,24 @@
+@use '@angular/material' as mat;
+
+@font-face {
+    font-family: "Cal Sans";
+    src: url("/fonts/CalSans-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Work Sans";
+    src: url("/fonts/WorkSans-Regular.ttf") format("truetype");
+}
+
+:root {
+  @include mat.typography-hierarchy(
+    mat.define-theme(
+      (
+        typography: (
+          use-system-variables: true,
+          system-variables-prefix: mat-sys
+        ),
+      )
+    )
+  );
+}

@@ -12,14 +12,22 @@ import { BreedQuery } from '@models/breed.model';
 @Component({
   selector: 'app-search-breed',
   imports: [SearchComponent, BreedsGridComponent],
-  template: `<app-search (selectedBreed)="onSelectedBreed($event)"></app-search>
+  template: `
+    <div class="container-search-breed">
+      <h1>Search your favorite dog breed</h1>
+      <p class="mat-body-large">
+        Explore the world of dogs with our breed search tool
+      </p>
+      <app-search (selectedBreed)="onSelectedBreed($event)"></app-search>
+    </div>
     @if (breeds.value(); as searchedBreeds) {
       <app-breeds-grid [breeds]="searchedBreeds"></app-breeds-grid>
     } @else if (breeds.isLoading()) {
       Loading...
     } @else if (breeds.error()) {
       Error...
-    }`,
+    }
+  `,
   styleUrl: './search-breed.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
