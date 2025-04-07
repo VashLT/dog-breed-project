@@ -131,8 +131,7 @@ export class SearchBreedComponent {
   }
   /**
    * Function to handle the breed selected by the user.
-   * if selectedBreed is empty, it means the user cleared the search.
-   * @param selectedBreed - The breed selected by the user.
+   *  @param selectedBreed - The breed selected by the user.
    */
   onSelectedBreed(selectedBreed: string) {
     const filter = this.breedsService.filter();
@@ -156,6 +155,10 @@ export class SearchBreedComponent {
       subBreed: '',
     });
   }
+  /**
+   * Function to handle the sub-breed selected by the user.
+   * @param selectedBreed - The sub-breed selected by the user.
+   */
   onSelectedSubBreed(selectedBreed: string) {
     const [breed, subBreed] = selectedBreed.split(BREED_SUB_BREED_SEPARATOR);
     const currQuery = this.breed();
