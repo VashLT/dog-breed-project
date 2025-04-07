@@ -2,10 +2,11 @@ import { Injectable, signal } from '@angular/core';
 import { BreedItem } from '@models/breed.model';
 import { downloadFile } from '@utils/files';
 import { tryCatch } from '@utils/try-catch';
-import { SnackbarService } from '@services/snackbar.service';
+import { SnackbarService } from '@services/snackbar/snackbar.service';
 import { LIKED_BREEDS_KEY } from '@constants/keys';
 import { FilterToggle } from '@models/filter-toggle.model';
 import { FILTER_OPTIONS } from '@constants/misc';
+
 /**
  * Service to handle communication between the search-breed and the breed-detail-dialog components.
  */

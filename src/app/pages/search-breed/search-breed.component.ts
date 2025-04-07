@@ -1,4 +1,4 @@
-import { SearchComponent } from '@/app/components/search/search.component';
+import { SearchComponent } from '@components/search/search.component';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,12 +11,12 @@ import {
 } from '@angular/core';
 import { BreedsGridComponent } from '@components/breeds-grid/breeds-grid.component';
 import { BreedsGridSkeletonComponent } from '@components/breeds-grid/breeds-grid-skeleton.component';
-import { DogApiService } from '@services/dog.api.service';
+import { DogApiService } from '@services/dog-api/dog-api.service';
 import { BreedQuery } from '@models/breed.model';
-import { BREED_SUB_BREED_SEPARATOR } from '@/app/constants/keys';
-import { normalizeString } from '@/app/utils/strings';
-import { SnackbarService } from '@/app/services/snackbar.service';
-import { BreedsService } from '@/app/services/breeds.service';
+import { BREED_SUB_BREED_SEPARATOR } from '@constants/keys';
+import { normalizeString } from '@utils/strings';
+import { SnackbarService } from '@services/snackbar/snackbar.service';
+import { BreedsService } from '@services/breeds/breeds.service';
 @Component({
   selector: 'app-search-breed',
   imports: [SearchComponent, BreedsGridComponent, BreedsGridSkeletonComponent],

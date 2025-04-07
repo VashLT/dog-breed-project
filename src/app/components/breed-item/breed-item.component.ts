@@ -11,7 +11,7 @@ import { MatMiniFabButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TitleCasePipe } from '@angular/common';
 import { BreedItem, BreedLikeEmit } from '@models/breed.model';
-import { BreedsService } from '@services/breeds.service';
+import { BreedsService } from '@services/breeds/breeds.service';
 @Component({
   selector: 'app-breed-item',
   imports: [MatMiniFabButton, MatIconModule, TitleCasePipe],
@@ -102,7 +102,7 @@ export class BreedItemComponent {
   isLiked = computed(() => {
     const likedBreeds = this.breedsService.likedBreeds();
     const src = this.src();
-    return likedBreeds.some((breed) => src.includes(breed));
+    return likedBreeds?.some((breed) => src.includes(breed));
   });
 
   constructor(private readonly breedsService: BreedsService) {}

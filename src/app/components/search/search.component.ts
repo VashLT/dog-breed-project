@@ -16,17 +16,17 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
-import { DogApiService } from '@services/dog.api.service';
+import { DogApiService } from '@services/dog-api/dog-api.service';
 import { debounceTime, distinctUntilChanged, map, startWith, tap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { BREED_SUB_BREED_SEPARATOR } from '@/app/constants/keys';
+import { BREED_SUB_BREED_SEPARATOR } from '@constants/keys';
 import { MatIconButton } from '@angular/material/button';
-import { BreedsService } from '@/app/services/breeds.service';
+import { BreedsService } from '@services/breeds/breeds.service';
 import { FilterToggleComponent } from '@components/ui/filter-toggle/filter-toggle.component';
-import { FilterToggle } from '@/app/models/filter-toggle.model';
+import { FilterToggle } from '@models/filter-toggle.model';
 import { FILTER_OPTIONS } from '@constants/misc';
-import { normalizeString } from '@/app/utils/strings';
+import { normalizeString } from '@utils/strings';
 @Component({
   selector: 'app-search',
   imports: [

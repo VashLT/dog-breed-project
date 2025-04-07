@@ -5,7 +5,8 @@ import { catchError, forkJoin, map, of } from 'rxjs';
 import { ApiResponse } from '@models/api.model';
 import { BreedList, BreedQuery } from '@models/breed.model';
 import { RANDOM_BREEDS_LIMIT } from '@constants/limits';
-import { SnackbarService } from '@services/snackbar.service';
+import { SnackbarService } from '@services/snackbar/snackbar.service';
+import { SEARCH_BREED_ERROR_MESSAGE } from '@/app/constants/messages';
 @Injectable({
   providedIn: 'root',
 })
@@ -33,7 +34,7 @@ export class DogApiService {
     return this.request<string[]>(`breed/${breed}/images`).pipe(
       catchError((err) => {
         this.snackbar.show({
-          message: err ?? 'Error searching breed',
+          message: err ?? SEARCH_BREED_ERROR_MESSAGE,
           type: 'error',
         });
         return of([]);
@@ -110,7 +111,16 @@ export class DogApiService {
    */
   getAllBreeds() {
     return rxResource({
-      loader: () => this.request<BreedList>('breeds/list/all'),
+      loader: () =>
+        this.request<BreedList>('breeds/list/all').pipe(
+          catchError((err) => {
+            this.snackbar.show({
+              message: err ?? 'Error loading breeds',
+              type: 'error',
+            });
+            return of({});
+          }),
+        ),
       defaultValue: {},
     });
   }

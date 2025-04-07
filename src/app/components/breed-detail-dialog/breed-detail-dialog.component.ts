@@ -12,7 +12,7 @@ import {
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { BreedsService } from '@services/breeds.service';
+import { BreedsService } from '@/app/services/breeds/breeds.service';
 import { BreedDetail } from '@models/breed.model';
 import { TitleCasePipe } from '@angular/common';
 @Component({

@@ -9,7 +9,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { BreedItemComponent } from '@components/breed-item/breed-item.component';
 import { BreedDetailDialogComponent } from '@components/breed-detail-dialog/breed-detail-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { BreedsService } from '@services/breeds.service';
+import { BreedsService } from '@services/breeds/breeds.service';
 import { BreedItem, BreedLikeEmit } from '@models/breed.model';
 
 @Component({
@@ -51,6 +51,9 @@ import { BreedItem, BreedLikeEmit } from '@models/breed.model';
 })
 export class BreedsGridComponent {
   readonly dialog = inject(MatDialog);
+  /**
+   * The list of breeds to display. The list of images urls.
+   */
   breeds = input.required<string[]>();
   /**
    * Whether the images have search action. This is an action for the random images, to
