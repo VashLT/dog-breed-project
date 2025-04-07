@@ -125,7 +125,7 @@ export class SearchComponent {
    * @returns The filtered list of breeds and sub-breeds.
    */
   filteredOptions$ = this.searchControl.valueChanges.pipe(
-    startWith(''),
+    startWith(this.searchControl.value),
     debounceTime(300),
     distinctUntilChanged(),
     /**
