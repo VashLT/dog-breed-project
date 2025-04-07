@@ -1,9 +1,36 @@
 :host {
-  display: block;
+  max-height: calc(100% - 1rem);
+  max-width: calc(100% - 4rem);
 }
 
-img {
-  max-height: 90vh;
-  max-width: 90vw;
-  object-fit: cover;
+picture {
+  max-height: 100%;
+  min-width: 300px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  figcaption {
+    color: var(--mat-sys-inverse-primary);
+  }
+}
+
+.btn-close {
+  --mdc-icon-button-icon-color: white;
+  --mdc-icon-button-icon-size: 2.5rem;
+  --mdc-icon-button-state-layer-size: 3rem;
+  margin-left: auto;
+  ::ng-deep mat-icon {
+    font-size: var(--mdc-icon-button-icon-size);
+    width: var(--mdc-icon-button-icon-size);
+    height: var(--mdc-icon-button-icon-size);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  align-items: center;
 }

@@ -32,3 +32,11 @@
   --mdc-snackbar-container-color: var(--mat-sys-warning-container);
   --mdc-snackbar-supporting-text-color: var(--mat-sys-on-warning-container);
 }
+// avoid getting a scrollbar when the dialog is open
+.mat-mdc-dialog-surface {
+  overflow-y: initial !important;
+}
+
+.cdk-overlay-backdrop {
+  background-color: rgba(0, 0, 0, 0.64);
+}

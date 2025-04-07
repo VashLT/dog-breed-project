@@ -3,15 +3,13 @@ import {
   Component,
   inject,
   input,
-  output,
 } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { BreedItemComponent } from '@components/breed-item/breed-item.component';
 import { BreedDetailDialogComponent } from '@components/breed-detail-dialog/breed-detail-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { downloadFile } from '@utils/files';
-import { tryCatch } from '@utils/try-catch';
-import { SnackbarService } from '@services/snackbar.service';
+import { BreedsService } from '@services/breeds.service';
+import { BreedItem } from '@models/breed.model';
 
 @Component({
   selector: 'app-breeds-grid',
@@ -39,43 +37,31 @@ export class BreedsGridComponent {
    */
   canSearchFromImages = input<boolean>(false);
   /**
-   * Emits the breed name when the item is explored
+   * Open the dialog to show the breed detail
+   * @param src url of the breed image
    */
-  explore = output<string>();
+  constructor(private readonly breedsService: BreedsService) {}
   /**
    * Open the dialog to show the breed detail
    * @param src url of the breed image
    */
-  constructor(private readonly snackbar: SnackbarService) {}
-  onItemPress(src: string) {
+  onItemPress({ src, name }: BreedItem) {
     this.dialog.open(BreedDetailDialogComponent, {
-      data: src,
+      data: { src, name, canSearch: this.canSearchFromImages() },
     });
   }
   /**
    * Download the image
    * @param src url of the breed image
    */
-  async onItemDownload(src: string) {
-    const name = src.split('/').pop();
-    if (!name) {
-      return;
-    }
-
-    const { error } = await tryCatch(downloadFile(src, name));
-    if (error) {
-      console.error(error);
-      this.snackbar.show({
-        message: 'Error downloading image',
-        type: 'error',
-      });
-    }
+  onItemDownload(item: BreedItem) {
+    this.breedsService.downloadSrc(item);
   }
   /**
-   * Explore the breed
+   * Explore the breed, it will trigger a search for the breed
    * @param breed name of the breed
    */
-  onItemExplore(breed: string) {
-    this.explore.emit(breed);
+  onItemExplore({ name }: BreedItem) {
+    this.breedsService.search.set(name);
   }
 }

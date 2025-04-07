@@ -9,14 +9,15 @@ import {
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TitleCasePipe } from '@angular/common';
+import { BreedItem } from '@models/breed.model';
 
 @Component({
   selector: 'app-breed-item',
   imports: [MatMiniFabButton, MatIconModule, TitleCasePipe],
   template: `<picture
     class="item-breed"
-    (click)="onPress()"
-    (keydown)="onPress()"
+    (click)="onPress($event)"
+    (keydown)="onPress($event)"
     tabindex="0"
   >
     <img
@@ -24,9 +25,10 @@ import { TitleCasePipe } from '@angular/common';
       [title]="name() | titlecase"
       [alt]="name() | titlecase"
       loading="lazy"
+      [tabIndex]="0"
     />
     <button
-      class="btn-download"
+      class="btn-action btn-download"
       mat-mini-fab
       title="Download image"
       aria-label="Download image"
@@ -37,7 +39,7 @@ import { TitleCasePipe } from '@angular/common';
     </button>
     @if (canSearch()) {
       <button
-        class="btn-search"
+        class="btn-action btn-search"
         mat-mini-fab
         title="Search more images of this breed"
         aria-label="Search more images of this breed"
@@ -60,31 +62,46 @@ export class BreedItemComponent {
   /**
    * Emits the source of the image when the item is clicked
    */
-  press = output<string>();
+  press = output<BreedItem>();
   /**
    * Emits the source of the image when the item is downloaded
    */
-  download = output<string>();
+  download = output<BreedItem>();
   /**
    * Emits the source of the image when the search action is triggered
    */
-  explore = output<string>();
+  explore = output<BreedItem>();
   /**
    * Title of the image, the name of the breed
    */
   name = computed(() => getBreedNameFromSrc(this.src()) ?? '');
-
-  onPress() {
-    this.press.emit(this.src());
+  /**
+   * Emits the item when the press action is triggered
+   */
+  onPress(event: MouseEvent | KeyboardEvent) {
+    if (event instanceof KeyboardEvent && event.key !== 'Enter') {
+      return;
+    }
+    this.press.emit({ name: this.name(), src: this.src() });
   }
-
+  /**
+   * Emits the item when the download action is triggered
+   */
   onDownload(event: MouseEvent | KeyboardEvent) {
     event.stopPropagation();
-    this.download.emit(this.src());
+    if (event instanceof KeyboardEvent && event.key !== 'Enter') {
+      return;
+    }
+    this.download.emit({ name: this.name(), src: this.src() });
   }
-
+  /**
+   * Emits the item when the search action is triggered
+   */
   onSearch(event: MouseEvent | KeyboardEvent) {
     event.stopPropagation();
-    this.explore.emit(this.name());
+    if (event instanceof KeyboardEvent && event.key !== 'Enter') {
+      return;
+    }
+    this.explore.emit({ name: this.name(), src: this.src() });
   }
 }

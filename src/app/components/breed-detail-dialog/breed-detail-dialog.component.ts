@@ -1,29 +1,52 @@
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+  MAT_DIALOG_DATA,
+  MatDialogClose,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { downloadFile } from '@/app/utils/files';
-import { tryCatch } from '@/app/utils/try-catch';
-import { SnackbarService } from '@/app/services/snackbar.service';
-
+import { BreedsService } from '@services/breeds.service';
+import { BreedDetail } from '@models/breed.model';
+import { TitleCasePipe } from '@angular/common';
 @Component({
   selector: 'app-breed-detail-dialog',
-  imports: [MatButtonModule, MatIconModule],
+  imports: [MatButtonModule, MatIconModule, MatDialogClose, TitleCasePipe],
   template: `
-    <img [src]="data" alt="Dog breed" loading="lazy" />
     <button
-      mat-fab
-      aria-label="Download image"
-      (click)="downloadImage()"
-      [disabled]="isLoading()"
+      mat-icon-button
+      class="btn-close"
+      aria-label="Close dialog"
+      mat-dialog-close
     >
-      <mat-icon>download</mat-icon>
+      <mat-icon>close</mat-icon>
     </button>
+    <picture>
+      <img [src]="data.src" alt="Dog breed" loading="lazy" />
+      <figcaption class="mat-headline-small">
+        {{ data.name | titlecase }}
+      </figcaption>
+    </picture>
+    <div class="actions">
+      @if (data.canSearch) {
+        <button
+          class="btn-action btn-search"
+          mat-mini-fab
+          aria-label="Search for breed"
+          (click)="onExplore()"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      }
+      <button
+        class="btn-action btn-download"
+        mat-mini-fab
+        aria-label="Download image"
+        (click)="onDownload()"
+      >
+        <mat-icon>download</mat-icon>
+      </button>
+    </div>
   `,
   styleUrl: './breed-detail-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,29 +55,22 @@ export class BreedDetailDialogComponent {
   /**
    * The image url, it's injected from the dialog data
    */
-  data = inject(MAT_DIALOG_DATA);
-  /**
-   * The loading state of the image, for instance if the image is downloading
-   */
-  isLoading = signal(false);
-  /**
-   * Download the image from the data url
-   */
-  constructor(private readonly snackbar: SnackbarService) {}
-  async downloadImage() {
-    this.isLoading.set(true);
-    const fileName = this.data.split('/').pop();
-    if (!fileName) return;
+  data = inject(MAT_DIALOG_DATA) as BreedDetail;
 
-    const { error } = await tryCatch(downloadFile(this.data, fileName));
-    if (error) {
-      console.error('Error downloading image:', error);
-      this.snackbar.show({
-        message: 'Error downloading image',
-        type: 'error',
-      });
-    }
+  constructor(
+    private readonly breedsService: BreedsService,
+    private readonly dialogRef: MatDialogRef<BreedDetailDialogComponent>,
+  ) {}
 
-    this.isLoading.set(false);
+  async onDownload() {
+    this.breedsService.downloadSrc(this.data);
+  }
+  /**
+   * Explore the breed, it will trigger a search for the breed
+   * @param breed name of the breed
+   */
+  onExplore() {
+    this.breedsService.search.set(this.data.name);
+    this.dialogRef.close();
   }
 }

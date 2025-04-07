@@ -24,16 +24,12 @@ import { SnackbarService } from '@/app/services/snackbar.service';
       <p class="mat-body-large">
         Explore the world of dogs with our breed search tool
       </p>
-      <app-search
-        [value]="searchValue()"
-        (selectedBreed)="onSelectedBreed($event)"
-      ></app-search>
+      <app-search (selectedBreed)="onSelectedBreed($event)"></app-search>
     </section>
     @if (showingBreeds(); as showingBreeds) {
       <app-breeds-grid
         [breeds]="showingBreeds"
         [canSearchFromImages]="canSearchFromImages()"
-        (explore)="onExplore($event)"
       ></app-breeds-grid>
     } @else if (breeds.isLoading() || randomBreeds.isLoading()) {
       <app-breeds-grid-skeleton></app-breeds-grid-skeleton>
@@ -50,10 +46,6 @@ export class SearchBreedComponent {
    * Signal to store the breed selected by the user.
    */
   breed = signal<BreedQuery>({ breed: '', subBreed: '' });
-  /**
-   * Set a custom value for the search input.
-   */
-  searchValue = signal<string>('');
   /**
    * Resource to handle the breeds.
    */
@@ -95,7 +87,7 @@ export class SearchBreedComponent {
 
       this.snackbar.show({
         message: `${results.length} breeds found`,
-        type: 'success',
+        type: 'info',
       });
     });
   }
@@ -127,12 +119,5 @@ export class SearchBreedComponent {
       breed,
       subBreed,
     });
-  }
-  /**
-   * Explore the breed, is the same as the breed selected by the user.
-   * @param breed the breed to explore
-   */
-  onExplore(breed: string) {
-    this.searchValue.set(breed);
   }
 }

@@ -19,8 +19,13 @@
 
     button {
       opacity: 1;
+      pointer-events: auto;
       visibility: visible;
     }
+  }
+
+  &:focus {
+    outline: 0.25rem solid var(--mat-sys-primary);
   }
 
   img {
@@ -28,7 +33,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.2s ease-in-out;
-    border-radius: 0.1rem;
+    border-radius: 0.25rem;
     cursor: zoom-in;
 
     &:not([src]) {
@@ -37,9 +42,6 @@
   }
   // Action buttons
   button {
-    --mdc-fab-small-container-color: var(--mat-sys-surface);
-    --mdc-fab-small-foreground-color: var(--mat-sys-on-surface);
-    --mdc-fab-small-container-shape: 0.25rem;
     position: absolute;
     right: 0.5rem;
     z-index: 1;
@@ -47,7 +49,8 @@
     // Hide the button until the image is hovered
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
 
     will-change: opacity, visibility;
     &.btn-download {

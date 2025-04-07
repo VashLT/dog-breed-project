@@ -5,7 +5,6 @@ import {
   computed,
   effect,
   inject,
-  input,
   OnInit,
   output,
   untracked,
@@ -24,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BREED_SUB_BREED_SEPARATOR } from '@/app/constants/keys';
 import { MatIconButton } from '@angular/material/button';
+import { BreedsService } from '@/app/services/breeds.service';
 @Component({
   selector: 'app-search',
   imports: [
@@ -85,10 +85,6 @@ import { MatIconButton } from '@angular/material/button';
 export class SearchComponent implements OnInit {
   private readonly api = inject(DogApiService);
   readonly autoComplete = viewChild<MatAutocomplete>('auto');
-  /**
-   * Set a custom value for the search input.
-   */
-  value = input<string>('');
   selectedBreed = output<string>();
   searchControl = new FormControl<string | null>(null);
   breeds = this.api.getAllBreeds();
@@ -134,13 +130,13 @@ export class SearchComponent implements OnInit {
     }),
     map((value) => this._filter(value ?? '')),
   );
-  constructor() {
+  constructor(private readonly breedsService: BreedsService) {
     /**
      * Sync a new target value with the search input.
      * It behaves as if the user typed the value and selected an option.
      */
     effect(() => {
-      const targetValue = this.value();
+      const targetValue = this.breedsService.search();
       const autoComplete = untracked(this.autoComplete);
 
       this.searchControl.setValue(targetValue);
@@ -158,10 +154,10 @@ export class SearchComponent implements OnInit {
   }
   ngOnInit(): void {
     /**
-     * Initialize the search input with the value provided by the parent component.
+     * Initialize the search input with the value provided by the parent.
      * By default if empty, it will suggest all the breeds and sub-breeds.
      */
-    this.searchControl.setValue(this.value());
+    this.searchControl.setValue(this.breedsService.search());
   }
   /**
    * Filter the list of breeds and sub-breeds based on the search term.
