@@ -112,7 +112,7 @@ describe('BreedsGridComponent', () => {
     it('should trigger search with breed name', () => {
       component.onItemExplore(mockBreedItem);
 
-      expect(breedsServiceMock.search()).toBe(mockBreedItem.name);
+      expect(breedsServiceMock.search().value).toEqual(mockBreedItem.name);
     });
   });
 

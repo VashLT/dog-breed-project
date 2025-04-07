@@ -107,7 +107,7 @@ describe('SearchComponent', () => {
       expect(component.autoCompleteBreeds()).toEqual(expectedOptions);
     });
     it('should update search input when BreedsService.search signal changes', fakeAsync(() => {
-      breedsServiceSpy.search.set('hound');
+      breedsServiceSpy.search.set({ value: 'hound' });
       fixture.detectChanges();
       tick();
 

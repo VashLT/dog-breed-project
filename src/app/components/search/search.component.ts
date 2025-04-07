@@ -149,7 +149,7 @@ export class SearchComponent {
      * It behaves as if the user typed the value and selected an option.
      */
     effect(() => {
-      const targetValue = this.breedsService.search();
+      const { value: targetValue } = this.breedsService.search();
       const autoComplete = untracked(this.autoComplete);
       this.searchControl.setValue(targetValue);
 

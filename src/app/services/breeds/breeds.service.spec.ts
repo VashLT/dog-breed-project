@@ -34,7 +34,7 @@ describe('BreedsService', () => {
 
   it('should initialize signals with default values', () => {
     service = TestBed.inject(BreedsService);
-    expect(service.search()).toBe('');
+    expect(service.search().value).toBe('');
     expect(service.filter()).toEqual(FILTER_OPTIONS[0]);
   });
 
@@ -172,9 +172,9 @@ describe('BreedsService', () => {
     it('should update search signal correctly', () => {
       const searchTerm = 'bulldog';
 
-      service.search.set(searchTerm);
+      service.search.set({ value: searchTerm });
 
-      expect(service.search()).toBe(searchTerm);
+      expect(service.search().value).toBe(searchTerm);
     });
 
     it('should update filter signal correctly', () => {

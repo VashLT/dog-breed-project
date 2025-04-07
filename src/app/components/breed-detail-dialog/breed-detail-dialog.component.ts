@@ -106,7 +106,7 @@ export class BreedDetailDialogComponent implements OnInit {
    * @param breed name of the breed
    */
   onExplore() {
-    this.breedsService.search.set(this.data.name);
+    this.breedsService.search.set({ value: this.data.name });
     this.dialogRef.close();
   }
   onLike() {

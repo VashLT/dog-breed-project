@@ -58,15 +58,33 @@ export class SearchBreedComponent {
    * Signal to store the breeds to show. Initially it will show
    * the breeds from the random breeds.
    */
-  showingBreeds = linkedSignal<string[] | null>(() => {
+  showingBreeds = linkedSignal<string[] | null | undefined>(() => {
     const breeds = this.breeds.value();
     const isSearching = this.breeds.isLoading();
     const randomBreeds = this.randomBreeds.value();
+    const filter = this.breedsService.filter();
+    const query = untracked(this.breed);
+    /**
+     * When searching always show skeletons.
+     */
+    if (isSearching) return null;
+    /**
+     * When no search is made, show all the liked breeds or the random breeds.
+     */
+    if (!query.breed) {
+      if (filter.id === 'liked')
+        /**
+         * Denote this `untracked` as the filtering of liked is handled in the
+         * grid component.
+         */
+        return untracked(this.breedsService.likedBreeds);
+      else return randomBreeds;
+    }
+
     if (breeds?.length) return breeds;
     /**
      * If user is searching by default hide the random breeds.
      */
-    if (isSearching || !randomBreeds?.length) return null;
 
     return randomBreeds;
   });
@@ -76,8 +94,8 @@ export class SearchBreedComponent {
    */
   canSearchFromImages = computed<boolean>(() => {
     const breeds = this.breeds.value();
-    const randomBreeds = this.randomBreeds.value();
-    return !breeds?.length && randomBreeds?.length > 0;
+    const showingBreeds = this.showingBreeds()?.length ?? 0;
+    return !breeds?.length && showingBreeds > 0;
   });
 
   constructor(
@@ -90,41 +108,11 @@ export class SearchBreedComponent {
     effect(() => {
       const results = this.breeds.value();
       if (!results?.length) return;
-      const filter = untracked(this.breedsService.filter);
-      /**
-       * Since liked breeds filter is handled by each breed item,
-       * we don't need to show a snackbar in this case.
-       */
-      if (filter.id === 'liked') return;
 
       this.snackbar.show({
         message: `${results.length} breeds found`,
         type: 'info',
       });
-    });
-    /**
-     * Effect to handle the filter.
-     */
-    effect(() => {
-      const filter = this.breedsService.filter();
-      const query = untracked(this.breed);
-      if (query.breed) return;
-      /**
-       * Switch between liked and all breeds. Avoid changing the data source,
-       * only switch the view.
-       */
-      if (filter.id === 'liked') {
-        /**
-         * If the user is searching for a liked breed, and the breed is empty,
-         * set the breeds to the liked breeds.
-         */
-        this.showingBreeds.set(untracked(this.breedsService.likedBreeds));
-      } else {
-        /**
-         * When filter is all, set the breeds to the random breeds when no breed is selected.
-         */
-        this.showingBreeds.set(untracked(this.randomBreeds.value));
-      }
     });
   }
   /**
@@ -132,17 +120,8 @@ export class SearchBreedComponent {
    *  @param selectedBreed - The breed selected by the user.
    */
   onSelectedBreed(selectedBreed: string) {
-    const filter = this.breedsService.filter();
-    /**
-     * If the user is searching for a liked breed, and the breed is empty,
-     * set the breeds to the liked breeds.
-     */
-    if (filter.id === 'liked' && !selectedBreed) {
-      this.showingBreeds.set(this.breedsService.likedBreeds());
-      return;
-    }
-    const hasSubBreed = selectedBreed.includes(BREED_SUB_BREED_SEPARATOR);
     const normalizedSelectedBreed = normalizeString(selectedBreed);
+    const hasSubBreed = selectedBreed.includes(BREED_SUB_BREED_SEPARATOR);
     if (hasSubBreed) return this.onSelectedSubBreed(normalizedSelectedBreed);
     const currQuery = this.breed();
     const isDiff = currQuery.breed !== normalizedSelectedBreed;

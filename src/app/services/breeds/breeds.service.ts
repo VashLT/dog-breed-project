@@ -16,9 +16,10 @@ import { FILTER_OPTIONS } from '@constants/misc';
 export class BreedsService {
   likedBreeds = signal<string[]>([]);
   /**
-   * Trigger a search for a breed
+   * Trigger a search for a breed. It's an object to avoid not emitting
+   * new values when the value is the same.
    */
-  search = signal<string>('');
+  search = signal<{ value: string }>({ value: '' });
   /**
    * The filter to apply to the search
    */

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { catchError, forkJoin, map, of } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 import { ApiResponse } from '@models/api.model';
 import { BreedList, BreedQuery } from '@models/breed.model';
 import { RANDOM_BREEDS_LIMIT } from '@constants/limits';
@@ -30,7 +30,7 @@ export class DogApiService {
    * @param breed - The breed to search for
    * @returns Observable with the images for search by breed
    */
-  searchByBreed(breed: string) {
+  searchByBreed(breed: string): Observable<string[]> {
     return this.request<string[]>(`breed/${breed}/images`).pipe(
       catchError((err) => {
         this.snackbar.show({
@@ -47,7 +47,7 @@ export class DogApiService {
    * @param subBreed - The sub breed to search for
    * @returns Observable with the images for search by sub breed
    */
-  searchBySubBreed(breed: string, subBreed: string) {
+  searchBySubBreed(breed: string, subBreed: string): Observable<string[]> {
     return this.request<string[]>(`breed/${breed}/${subBreed}/images`).pipe(
       catchError((err) => {
         this.snackbar.show({
@@ -102,7 +102,6 @@ export class DogApiService {
           }),
         );
       },
-      defaultValue: [],
     });
   }
   /**

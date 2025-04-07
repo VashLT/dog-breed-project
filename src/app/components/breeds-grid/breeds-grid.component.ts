@@ -60,6 +60,10 @@ export class BreedsGridComponent {
    * allow the user to search for a breed by image.
    */
   canSearchFromImages = input<boolean>(false);
+  /**
+   * The list of breeds to display. The list of images urls.
+   * It will be filtered if the user is searching for a liked breed.
+   */
   showingBreeds = computed(() => {
     const filter = this.breedsService.filter();
     const breeds = this.breeds();
@@ -95,7 +99,7 @@ export class BreedsGridComponent {
    * @param breed name of the breed
    */
   onItemExplore({ name }: BreedItem) {
-    this.breedsService.search.set(name);
+    this.breedsService.search.set({ value: name });
   }
   /**
    * Like the breed

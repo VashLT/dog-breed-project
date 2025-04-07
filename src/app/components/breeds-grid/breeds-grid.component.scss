@@ -1,11 +1,11 @@
 @use '@angular/material' as mat;
 
 :host {
+  --gap-items: 1rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 10px;
-  padding-inline: 4rem;
-  padding-block: 1rem;
+  gap: var(--gap-items);
+  padding: var(--gap-items);
 
   &.empty-state {
     display: flex;
@@ -33,7 +33,6 @@
 
 @media screen and (max-width: 40rem) {
   :host {
-    padding-inline: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
