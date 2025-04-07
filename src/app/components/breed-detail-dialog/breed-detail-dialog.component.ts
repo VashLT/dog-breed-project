@@ -14,6 +14,7 @@ import { TitleCasePipe } from '@angular/common';
   imports: [MatButtonModule, MatIconModule, MatDialogClose, TitleCasePipe],
   template: `
     <button
+      [tabIndex]="0"
       mat-icon-button
       class="btn-close"
       aria-label="Close dialog"

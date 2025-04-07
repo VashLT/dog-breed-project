@@ -5,7 +5,9 @@ import {
   computed,
   effect,
   inject,
+  linkedSignal,
   signal,
+  untracked,
 } from '@angular/core';
 import { BreedsGridComponent } from '@components/breeds-grid/breeds-grid.component';
 import { BreedsGridSkeletonComponent } from '@components/breeds-grid/breeds-grid-skeleton.component';
@@ -14,7 +16,7 @@ import { BreedQuery } from '@models/breed.model';
 import { BREED_SUB_BREED_SEPARATOR } from '@/app/constants/keys';
 import { normalizeString } from '@/app/utils/strings';
 import { SnackbarService } from '@/app/services/snackbar.service';
-
+import { BreedsService } from '@/app/services/breeds.service';
 @Component({
   selector: 'app-search-breed',
   imports: [SearchComponent, BreedsGridComponent, BreedsGridSkeletonComponent],
@@ -58,7 +60,7 @@ export class SearchBreedComponent {
    * Signal to store the breeds to show. Initially it will show
    * the breeds from the random breeds.
    */
-  showingBreeds = computed<string[] | null>(() => {
+  showingBreeds = linkedSignal<string[] | null>(() => {
     const breeds = this.breeds.value();
     const isSearching = this.breeds.isLoading();
     const randomBreeds = this.randomBreeds.value();
@@ -80,15 +82,51 @@ export class SearchBreedComponent {
     return !breeds?.length && randomBreeds?.length > 0;
   });
 
-  constructor(private readonly snackbar: SnackbarService) {
+  constructor(
+    private readonly snackbar: SnackbarService,
+    private readonly breedsService: BreedsService,
+  ) {
+    /**
+     * Show a snackbar when the breeds are found.
+     */
     effect(() => {
       const results = this.breeds.value();
       if (!results?.length) return;
+      const filter = untracked(this.breedsService.filter);
+      /**
+       * Since liked breeds filter is handled by each breed item,
+       * we don't need to show a snackbar in this case.
+       */
+      if (filter.id === 'liked') return;
 
       this.snackbar.show({
         message: `${results.length} breeds found`,
         type: 'info',
       });
+    });
+    /**
+     * Effect to handle the filter.
+     */
+    effect(() => {
+      const filter = this.breedsService.filter();
+      const query = untracked(this.breed);
+      if (query.breed) return;
+      /**
+       * Switch between liked and all breeds. Avoid changing the data source,
+       * only switch the view.
+       */
+      if (filter.id === 'liked') {
+        /**
+         * If the user is searching for a liked breed, and the breed is empty,
+         * set the breeds to the liked breeds.
+         */
+        this.showingBreeds.set(untracked(this.breedsService.likedBreeds));
+      } else {
+        /**
+         * When filter is all, set the breeds to the random breeds when no breed is selected.
+         */
+        this.showingBreeds.set(untracked(this.randomBreeds.value));
+      }
     });
   }
   /**
@@ -97,6 +135,15 @@ export class SearchBreedComponent {
    * @param selectedBreed - The breed selected by the user.
    */
   onSelectedBreed(selectedBreed: string) {
+    const filter = this.breedsService.filter();
+    /**
+     * If the user is searching for a liked breed, and the breed is empty,
+     * set the breeds to the liked breeds.
+     */
+    if (filter.id === 'liked' && !selectedBreed) {
+      this.showingBreeds.set(this.breedsService.likedBreeds());
+      return;
+    }
     const hasSubBreed = selectedBreed.includes(BREED_SUB_BREED_SEPARATOR);
     const normalizedSelectedBreed = normalizeString(selectedBreed);
     if (hasSubBreed) return this.onSelectedSubBreed(normalizedSelectedBreed);

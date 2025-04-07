@@ -13,3 +13,7 @@ export interface BreedItem {
 export interface BreedDetail extends BreedItem {
   canSearch: boolean;
 }
+
+export interface BreedLikeEmit extends BreedItem {
+  isLiked: boolean;
+}

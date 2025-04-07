@@ -12,7 +12,7 @@ This project is about dogs!
 
 ## Additional features
 - [x] Detailed breed information
-- [] Fav list
+- [x] Fav list
 - [] Social sharing
 - [] Enhance autocomplete
   - [] Suggest previous searches

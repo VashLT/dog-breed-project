@@ -42,8 +42,9 @@
   }
   // Action buttons
   button {
+    --gap: 0.5rem;
     position: absolute;
-    right: 0.5rem;
+    right: var(--gap);
     z-index: 1;
 
     // Hide the button until the image is hovered
@@ -53,12 +54,27 @@
     transition: opacity 0.2s ease-in-out;
 
     will-change: opacity, visibility;
+
+    &.processing {
+      pointer-events: none;
+    }
+
     &.btn-download {
-      bottom: 0.5rem;
+      bottom: var(--gap);
     }
 
     &.btn-search {
-      top: 0.5rem;
+      bottom: var(--gap);
+      left: var(--gap);
+    }
+
+    &.btn-like {
+      top: var(--gap);
+      right: var(--gap);
+
+      &.liked mat-icon {
+        color: var(--mat-sys-primary);
+      }
     }
   }
 }

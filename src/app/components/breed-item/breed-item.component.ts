@@ -5,12 +5,13 @@ import {
   computed,
   input,
   output,
+  signal,
 } from '@angular/core';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TitleCasePipe } from '@angular/common';
-import { BreedItem } from '@models/breed.model';
-
+import { BreedItem, BreedLikeEmit } from '@models/breed.model';
+import { BreedsService } from '@services/breeds.service';
 @Component({
   selector: 'app-breed-item',
   imports: [MatMiniFabButton, MatIconModule, TitleCasePipe],
@@ -36,6 +37,18 @@ import { BreedItem } from '@models/breed.model';
       (keydown)="onDownload($event)"
     >
       <mat-icon>download</mat-icon>
+    </button>
+    <button
+      class="btn-action btn-like"
+      [class.liked]="isLiked()"
+      [class.processing]="isProcessing()"
+      mat-mini-fab
+      title="Like breed"
+      aria-label="Like breed"
+      (click)="onLike($event)"
+      (keydown)="onLike($event)"
+    >
+      <mat-icon>favorite</mat-icon>
     </button>
     @if (canSearch()) {
       <button
@@ -72,9 +85,27 @@ export class BreedItemComponent {
    */
   explore = output<BreedItem>();
   /**
+   * Emits the source of the image when the like action is triggered
+   */
+  like = output<BreedLikeEmit>();
+  /**
+   * Whether the item is processing
+   */
+  isProcessing = signal(false);
+  /**
    * Title of the image, the name of the breed
    */
   name = computed(() => getBreedNameFromSrc(this.src()) ?? '');
+  /**
+   * Whether the item is liked
+   */
+  isLiked = computed(() => {
+    const likedBreeds = this.breedsService.likedBreeds();
+    const src = this.src();
+    return likedBreeds.some((breed) => src.includes(breed));
+  });
+
+  constructor(private readonly breedsService: BreedsService) {}
   /**
    * Emits the item when the press action is triggered
    */
@@ -103,5 +134,26 @@ export class BreedItemComponent {
       return;
     }
     this.explore.emit({ name: this.name(), src: this.src() });
+  }
+  /**
+   * Emits the item when the like action is triggered
+   */
+  onLike(event: MouseEvent | KeyboardEvent) {
+    event.stopPropagation();
+    if (event instanceof KeyboardEvent && event.key !== 'Enter') {
+      return;
+    }
+    this.isProcessing.set(true);
+    this.like.emit({
+      name: this.name(),
+      src: this.src(),
+      isLiked: this.isLiked(),
+    });
+    /**
+     * Reset the processing state after the like action is triggered
+     */
+    setTimeout(() => {
+      this.isProcessing.set(false);
+    }, 0);
   }
 }

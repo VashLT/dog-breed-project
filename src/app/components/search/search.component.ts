@@ -24,6 +24,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BREED_SUB_BREED_SEPARATOR } from '@/app/constants/keys';
 import { MatIconButton } from '@angular/material/button';
 import { BreedsService } from '@/app/services/breeds.service';
+import { FilterToggleComponent } from '@components/ui/filter-toggle/filter-toggle.component';
+import { FilterToggle } from '@/app/models/filter-toggle.model';
+import { FILTER_OPTIONS } from '@constants/misc';
+import { normalizeString } from '@/app/utils/strings';
 @Component({
   selector: 'app-search',
   imports: [
@@ -37,6 +41,7 @@ import { BreedsService } from '@/app/services/breeds.service';
     MatIconButton,
     TitleCasePipe,
     AsyncPipe,
+    FilterToggleComponent,
   ],
   template: `
     @let isLoading = breeds.isLoading();
@@ -78,6 +83,10 @@ import { BreedsService } from '@/app/services/breeds.service';
         }
       </mat-form-field>
     </div>
+    <app-filter-toggle
+      [options]="filterOptions"
+      (selected)="onSelectedFilter($event)"
+    ></app-filter-toggle>
   `,
   styleUrl: './search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -130,6 +139,11 @@ export class SearchComponent implements OnInit {
     }),
     map((value) => this._filter(value ?? '')),
   );
+  /**
+   * The options for the filter toggle.
+   */
+  public readonly filterOptions = FILTER_OPTIONS;
+
   constructor(private readonly breedsService: BreedsService) {
     /**
      * Sync a new target value with the search input.
@@ -159,13 +173,20 @@ export class SearchComponent implements OnInit {
      */
     this.searchControl.setValue(this.breedsService.search());
   }
+  onSelectedFilter(filter: FilterToggle) {
+    this.breedsService.filter.set(filter);
+    if (!this.searchControl.value) {
+      this.selectedBreed.emit('');
+    }
+  }
   /**
    * Filter the list of breeds and sub-breeds based on the search term.
    * @param value - The search term.
    * @returns The filtered list of breeds and sub-breeds.
    */
   private _filter(value: string): string[] {
-    const searchTerm = value.toLowerCase().trim();
+    const searchTerm = normalizeString(value);
+
     if (!searchTerm) return this.autoCompleteBreeds();
     return this.autoCompleteBreeds().filter((breed) =>
       breed.toLowerCase().includes(searchTerm),
