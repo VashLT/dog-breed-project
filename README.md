@@ -1,5 +1,5 @@
 # Dog Breed Project
-This project is about dogs!
+This project is about dogs! [Live demo](https://dog-breed-one.vercel.app/)
 
 ## Upcoming features
 - [x] Search feature
@@ -8,7 +8,6 @@ This project is about dogs!
   - [x] autocomplete & suggestions
 - [x] Display images
 - [x] Random images
-- [] Virtual scrolling
 
 ## Additional features
 - [x] Detailed breed information
