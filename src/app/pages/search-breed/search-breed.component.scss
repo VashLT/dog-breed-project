@@ -12,6 +12,9 @@
   position: relative;
   padding: calc(var(--height-top-bar) + 2rem) 2rem 2rem;
   background: linear-gradient(to bottom, black, rgb(22, 22, 28));
+  background:
+      radial-gradient(rgba(0, 0, 0, 0.65) 20%, rgb(0, 0, 0) 100%),
+      url("/hero-bg.webp");
 
   h1 {
     margin: 0;
