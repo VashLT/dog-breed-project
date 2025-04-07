@@ -179,8 +179,19 @@ export class SearchComponent {
     const searchTerm = normalizeString(value);
 
     if (!searchTerm) return this.autoCompleteBreeds();
-    return this.autoCompleteBreeds().filter((breed) =>
-      breed.toLowerCase().includes(searchTerm),
-    );
+    /**
+     * Split the search term into tokens.
+     * @example ['bulldog', 'french', 'english', 'staffordshire']
+     */
+    const tokens = searchTerm.split(' ').filter((word) => word.length > 0);
+
+    /**
+     * Then filter the list of breeds and sub-breeds based on the tokens.
+     */
+    return this.autoCompleteBreeds().filter((breed) => {
+      const normalizedBreed = normalizeString(breed);
+
+      return tokens.every((token) => normalizedBreed.includes(token));
+    });
   }
 }
