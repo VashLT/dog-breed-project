@@ -163,7 +163,23 @@ export class SearchComponent {
         }
       }
     });
+    /**
+     * sync filteredOptions$ with the breeds when loaded.
+     * This is to avoid the case where the breeds are loaded after the search.
+     */
+    effect(() => {
+      const value = this.breeds.value();
+      if (Object.keys(value).length === 0) return;
+
+      this.searchControl.setValue(this.searchControl.value, {
+        emitEvent: true,
+      });
+    });
   }
+  /**
+   * Handle the filter selected by the user.
+   * @param filter - The filter selected by the user.
+   */
   onSelectedFilter(filter: FilterToggle) {
     this.breedsService.filter.set(filter);
     if (!this.searchControl.value) {
