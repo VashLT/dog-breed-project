@@ -91,7 +91,7 @@ import { normalizeString } from '@/app/utils/strings';
   styleUrl: './search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent {
   private readonly api = inject(DogApiService);
   readonly autoComplete = viewChild<MatAutocomplete>('auto');
   selectedBreed = output<string>();
@@ -152,7 +152,6 @@ export class SearchComponent implements OnInit {
     effect(() => {
       const targetValue = this.breedsService.search();
       const autoComplete = untracked(this.autoComplete);
-
       this.searchControl.setValue(targetValue);
 
       if (autoComplete) {
@@ -165,13 +164,6 @@ export class SearchComponent implements OnInit {
         }
       }
     });
-  }
-  ngOnInit(): void {
-    /**
-     * Initialize the search input with the value provided by the parent.
-     * By default if empty, it will suggest all the breeds and sub-breeds.
-     */
-    this.searchControl.setValue(this.breedsService.search());
   }
   onSelectedFilter(filter: FilterToggle) {
     this.breedsService.filter.set(filter);
