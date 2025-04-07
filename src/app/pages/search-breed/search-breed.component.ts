@@ -35,8 +35,6 @@ import { BreedsService } from '@/app/services/breeds.service';
       ></app-breeds-grid>
     } @else if (breeds.isLoading() || randomBreeds.isLoading()) {
       <app-breeds-grid-skeleton></app-breeds-grid-skeleton>
-    } @else if (breeds.error() || randomBreeds.error()) {
-      <p class="mat-body-large">No breeds found</p>
     }
   `,
   styleUrl: './search-breed.component.scss',

@@ -27,7 +27,12 @@ import { BreedItem, BreedLikeEmit } from '@models/breed.model';
       ></app-breed-item>
     } @empty {
       <figure>
-        <img src="/no-breeds.webp" alt="No breeds empty state" />
+        <img
+          src="/no-breeds.webp"
+          alt="No breeds empty state"
+          height="600"
+          width="600"
+        />
         <figcaption class="mat-body-large">
           <strong>{{
             breedsService.filter().id === 'liked'
