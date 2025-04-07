@@ -28,6 +28,12 @@ body {
   margin: 0px;
 }
 
+body {
+  position: relative;
+  max-width: var(--max-width-page);
+  margin-inline: auto;
+}
+
 *,
 *::before,
 *::after {
