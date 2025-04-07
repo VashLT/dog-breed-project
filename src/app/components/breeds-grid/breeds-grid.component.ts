@@ -28,13 +28,13 @@ import { BreedItem, BreedLikeEmit } from '@models/breed.model';
     } @empty {
       <figure>
         <img src="/no-breeds.webp" alt="No breeds empty state" />
-        @if (breedsService.filter().id === 'liked') {
-          <figcaption class="mat-body-large">
-            <strong>No liked breeds found</strong>
-          </figcaption>
-        } @else {
-          <figcaption class="mat-body-large">No breeds found</figcaption>
-        }
+        <figcaption class="mat-body-large">
+          <strong>{{
+            breedsService.filter().id === 'liked'
+              ? 'No liked breeds found'
+              : 'No breeds found'
+          }}</strong>
+        </figcaption>
       </figure>
     }
   `,
