@@ -14,8 +14,8 @@
   gap: 0.5rem;
   cursor: pointer;
   will-change: background-color, border-color, color;
-  transition: background-color 0.2s ease-in-out,
-    border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  transition: background-color 0.25s ease-in-out,
+    border-color 0.25s ease-in-out, color 0.25s ease-in-out;
   &.selected {
     background-color: var(--mat-sys-primary-container);
     border: 1px solid var(--mat-sys-on-primary-container);

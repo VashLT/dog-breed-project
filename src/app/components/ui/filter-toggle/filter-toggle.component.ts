@@ -7,15 +7,18 @@ import {
   output,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatRippleModule } from '@angular/material/core';
+
 @Component({
   selector: 'app-filter-toggle',
-  imports: [MatIconModule],
+  imports: [MatIconModule, MatRippleModule],
   template: `@for (option of options(); track option.name) {
     <button
       class="filter-toggle-option"
       [class.selected]="option.name === _selected()?.name"
       (click)="onSelect(option.name, $event)"
       (keydown)="onSelect(option.name, $event)"
+      matRipple
     >
       <mat-icon>{{ option.icon }}</mat-icon>
       {{ option.name }}
